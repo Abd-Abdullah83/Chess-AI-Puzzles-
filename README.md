@@ -36,7 +36,7 @@ Test your skills with a dedicated Puzzle Mode featuring **four difficulty levels
 ## 🛠️ Technical Stack
 - **Language:** C++
 - **Graphics & Audio:** [SFML (Simple and Fast Multimedia Library)](https://www.sfml-dev.org/)
-- **Paradigm:** Object-Oriented Programming (OOP)
+- **Architecture:** Programming Fundamental + (OOP)
 
 ---
 
