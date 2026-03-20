@@ -161,6 +161,7 @@ Chess-AI-Puzzles/
 ├── 📂 audio/                    ← Sound effects + music
 ├── 📂 Font/
 │   └── arial.ttf
+├── 📂 Output/                    ← Screenshots of Game
 │
 ├── .gitignore
 └── LICENSE
