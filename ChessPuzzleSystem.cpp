@@ -10,8 +10,6 @@
 using namespace sf;
 using namespace std;
 
-
-
 ChessPuzzleSystem::ChessPuzzleSystem()
     : currentPuzzle(nullptr), userRating(1200), streakCount(0),
     lastSolvedDate(0), moveIndex(0), attempts(0), hintsUsed(0),
@@ -21,10 +19,6 @@ ChessPuzzleSystem::ChessPuzzleSystem()
 ChessPuzzleSystem::~ChessPuzzleSystem() {
     if (currentPuzzle) delete currentPuzzle;
 }
-
-// ============================================================
-//  initializePuzzles
-// ============================================================
 
 void ChessPuzzleSystem::initializePuzzles() {
     easyPuzzles.clear(); intermediatePuzzles.clear();
