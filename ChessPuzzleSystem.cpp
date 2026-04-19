@@ -24,7 +24,6 @@ void ChessPuzzleSystem::initializePuzzles() {
     easyPuzzles.clear(); intermediatePuzzles.clear();
     hardPuzzles.clear(); ultraHardPuzzles.clear();
 
-    // ── EASY ──────────────────────────────────────────────
     Puzzle e1; e1.id = 1; e1.fen = "6k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 1";
     e1.solution = { "Ra8#" }; e1.difficulty = PuzzleDifficulty::EASY;
     e1.theme = "Back Rank Mate"; e1.description = "White to move";
@@ -50,7 +49,6 @@ void ChessPuzzleSystem::initializePuzzles() {
     e5.theme = "Pin and Check"; e5.description = "White to move";
     e5.objective = "Win pawn with check"; e5.whiteToMove = true; easyPuzzles.push_back(e5);
 
-    // ── INTERMEDIATE ──────────────────────────────────────
     Puzzle i1; i1.id = 6; i1.fen = "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 1";
     i1.solution = { "Bxf7+","Kxf7","Ng5+" }; i1.difficulty = PuzzleDifficulty::INTERMEDIATE;
     i1.theme = "Discovered Attack"; i1.description = "White to move";
@@ -76,7 +74,6 @@ void ChessPuzzleSystem::initializePuzzles() {
     i5.theme = "Deflection"; i5.description = "Black to move";
     i5.objective = "Win material"; i5.whiteToMove = false; intermediatePuzzles.push_back(i5);
 
-    // ── HARD ──────────────────────────────────────────────
     Puzzle h1; h1.id = 11; h1.fen = "r2qkb1r/ppp2ppp/2n5/3pP3/3Pn1b1/2PB1N2/PP3PPP/RNBQK2R b KQkq - 0 1";
     h1.solution = { "Nxf2","Kxf2","Qh4+","g3","Qxg3#" }; h1.difficulty = PuzzleDifficulty::HARD;
     h1.theme = "Sacrificial Attack"; h1.description = "Black to move";
@@ -102,7 +99,6 @@ void ChessPuzzleSystem::initializePuzzles() {
     h5.theme = "Opposition"; h5.description = "White to move";
     h5.objective = "Win the pawn"; h5.whiteToMove = true; hardPuzzles.push_back(h5);
 
-    // ── ULTRA HARD ────────────────────────────────────────
     Puzzle u1; u1.id = 16; u1.fen = "r1bqk2r/ppp2ppp/2n2n2/2bpp3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 b kq - 0 1";
     u1.solution = { "Nxe4","dxe4","Bxf2+","Kxf2","Qh4+","g3","Qxc4+" }; u1.difficulty = PuzzleDifficulty::ULTRA_HARD;
     u1.theme = "Complex Sacrifice"; u1.description = "Black to move";
@@ -130,9 +126,6 @@ void ChessPuzzleSystem::initializePuzzles() {
     u5.objective = "Win the game"; u5.whiteToMove = true; ultraHardPuzzles.push_back(u5);
 }
 
-// ============================================================
-//  getNextPuzzle / startPuzzle / checkMove / completePuzzle
-// ============================================================
 
 Puzzle ChessPuzzleSystem::getNextPuzzle(PuzzleDifficulty difficulty) {
     vector<Puzzle>* ps = nullptr;
@@ -225,9 +218,7 @@ PuzzleResult ChessPuzzleSystem::completePuzzle(bool solved) {
     return r;
 }
 
-// ============================================================
-//  getHint / helpers
-// ============================================================
+
 
 string ChessPuzzleSystem::getHint() {
     if (!currentPuzzle) return "No active puzzle";
@@ -328,11 +319,7 @@ void ChessPuzzleSystem::loadProgress() {
     for (int i = 0; i < cnt; i++) { int id; f >> id; solvedPuzzles.insert(id); }
 }
 
-// ============================================================
-//  UI STRUCT IMPLEMENTATIONS
-// ============================================================
 
-// ── PuzzleButton ─────────────────────────────────────────────
 void PuzzleButton::setup(const string& txt, Font& font, unsigned cs,
     Color bg, Color hover, Color outline, float thick) {
     normalColor = bg; hoverColor = hover;
@@ -366,7 +353,7 @@ void PuzzleButton::update(Vector2i mp) {
 void PuzzleButton::draw(RenderWindow& win) { win.draw(shape); win.draw(label); }
 bool PuzzleButton::contains(Vector2f p) const { return shape.getGlobalBounds().contains(p); }
 
-// ── PuzzleNotification ────────────────────────────────────────
+
 void PuzzleNotification::show(const string& msg, Color c, Font& font, float dur) {
     duration = dur; active = true; clock.restart();
     text.setFont(font); text.setString(msg);
@@ -386,7 +373,6 @@ void PuzzleNotification::draw(RenderWindow& win) {
     if (t >= duration) active = false;
 }
 
-// ── PuzzleStars ───────────────────────────────────────────────
 void PuzzleStars::setup(int n, float x, float y, float radius, float gap) {
     count = n; stars.resize(n);
     for (int i = 0; i < n; i++) {
@@ -407,7 +393,6 @@ void PuzzleStars::draw(RenderWindow& win) {
     for (auto& s : stars) win.draw(s);
 }
 
-// ── PuzzleMoveLog ─────────────────────────────────────────────
 void PuzzleMoveLog::init(Font& f, Vector2f p, float lh) {
     font = &f; pos = p; lineH = lh;
 }
@@ -426,15 +411,7 @@ void PuzzleMoveLog::draw(RenderWindow& win) {
     }
 }
 
-// ============================================================
-//  runPuzzleMode
-//  Relies on Chess.cpp externs: boardLogic, boardArr, whiteTurn,
-//  tileW, tileH, offX, offY, isInsideBoard, isValidMove,
-//  makeMove, updateboard, loadBoardFromFEN,
-//  drawBoard, drawPieces, moveToSAN
-// ============================================================
 
-// Forward-declare the Chess.cpp globals we need
 extern char  boardLogic[8][8];
 extern int   boardArr[8][8];
 extern bool  whiteTurn;
@@ -450,17 +427,7 @@ void        drawBoard(RenderWindow& win, RectangleShape& box,
 void        drawPieces(RenderWindow& win, Texture W[], Texture B[], int sr, int sc);
 string      moveToSAN(int fr, int fc, int tr, int tc);
 
-// ── Colour palette ────────────────────────────────────────────
-// ============================================================
-//  DROP-IN REPLACEMENT FOR runPuzzleMode
-//  Fixes:
-//   1. Piece size  – dynamic scale so pieces fit inside tiles
-//   2. Duplicate buttons – positioned once, drawn once
-//   3. solutionClock scope – declared BEFORE the while-loop
-//   4. Right-panel layout – clean, no overlapping text
-// ============================================================
 
-// ── Forward-declares (already present in your file – keep them) ──
 extern char  boardLogic[8][8];
 extern int   boardArr[8][8];
 extern bool  whiteTurn;
@@ -494,7 +461,6 @@ namespace PC {
     const Color RING_OUT(80, 200, 100, 160);
 }
 
-// ── Small helpers ─────────────────────────────────────────────
 static string pzDiffName(PuzzleDifficulty d) {
     switch (d) {
     case PuzzleDifficulty::EASY:        return "Easy";
@@ -566,10 +532,8 @@ static int pzCalcStars(const PuzzleResult& r) {
     return 1;
 }
 
-// ============================================================
 void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
 {
-    // ── Textures ──────────────────────────────────────────────
     Texture texW[6], texB[6];
     const char* wf[] = { "pieces/white-pawn.png","pieces/white-rook.png",
                       "pieces/white-knight.png","pieces/white-bishop.png",
@@ -579,12 +543,10 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
                       "pieces/black-queen.png","pieces/black-king.png" };
     for (int i = 0; i < 6; i++) { texW[i].loadFromFile(wf[i]); texB[i].loadFromFile(bf[i]); }
 
-    // ── Fonts ─────────────────────────────────────────────────
     Font fontUI, fontTitle;
     if (!fontUI.loadFromFile("Font/roboto.ttf")) fontUI.loadFromFile("Font/arial.ttf");
     if (!fontTitle.loadFromFile("Font/bebasneue.ttf")) fontTitle = fontUI;
 
-    // ── Sounds ────────────────────────────────────────────────
     SoundBuffer sbMove, sbWrong, sbSolve, sbFail, sbHint;
     sbMove.loadFromFile("audio/move.wav");
     sbWrong.loadFromFile("audio/capture.wav");
@@ -594,7 +556,6 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
     Sound sndMove(sbMove), sndWrong(sbWrong), sndSolve(sbSolve),
         sndFail(sbFail), sndHint(sbHint);
 
-    // ── State ─────────────────────────────────────────────────
     PuzzleDifficulty selDiff = PuzzleDifficulty::EASY;
     Puzzle cur = ps.getNextPuzzle(selDiff);
     ps.startPuzzle(cur);
@@ -603,7 +564,7 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
 
     bool pzDone = false, pzWon = false, showSol = false;
     int  solStep = 0;
-    Clock solutionClock;          // FIX 1 – OUTSIDE the while loop
+    Clock solutionClock;          
 
     bool  dragging = false;
     int   dragR = -1, dragC = -1, hoverR = -1, hoverC = -1;
@@ -622,7 +583,6 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
     bool uiReady = false;
     RectangleShape boardBox;
 
-    // ── FIX 2 – Local piece-drawing lambda: dynamic tile-fitted scale ──
     auto drawPiecesLocal = [&](int skipR, int skipC) {
         for (int r = 0; r < 8; r++) for (int c = 0; c < 8; c++) {
             if (r == skipR && c == skipC) continue;
@@ -631,7 +591,6 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
             Texture& tex = (id > 0) ? texW[id - 1] : texB[-id - 1];
             Vector2u ts = tex.getSize();
             if (ts.x == 0) continue;
-            // Scale piece so it fills 88% of the tile
             float scale = (tileW * 0.88f) / (float)ts.x;
             float ox = (tileW - ts.x * scale) / 2.f;
             float oy = (tileH - ts.y * scale) / 2.f;
@@ -642,7 +601,6 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
         }
         };
 
-    // ── Load-puzzle helper ────────────────────────────────────
     auto loadPuzzle = [&](PuzzleDifficulty d) {
         selDiff = d; cur = ps.getNextPuzzle(d);
         ps.startPuzzle(cur);
@@ -655,16 +613,14 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
         moveLog.clear(); stars.setRating(0);
         };
 
-    // ─────────────────────────────────────────────────────────
-    //  MAIN LOOP
-    // ─────────────────────────────────────────────────────────
+
     while (window.isOpen()) {
 
-        // ── 1. Layout ─────────────────────────────────────────
+     
         const float W = (float)window.getSize().x;
         const float H = (float)window.getSize().y;
 
-        // Board: leave room for side panels and top/bottom labels
+       
         float board = min(H * 0.86f, W * 0.56f);
         board = max(board, 400.f);
         tileW = tileH = board / 8.f;
@@ -677,7 +633,6 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
         const float RX = offX + board + 8.f;
         const float RW = min(PANW, W - RX - 4.f);
 
-        // Build UI widgets once
         if (!uiReady) {
             uiReady = true;
             moveLog.init(fontUI, { LX + LP,0 });
@@ -697,18 +652,16 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
             }
         }
 
-        // ── 2. Position ALL buttons (for hit-testing this frame) ──
+      
         btnBack.resize(110, 34); btnBack.setPos(LX, 12.f);
 
         const float LY = 54.f, LH = H - LY - 14.f;
 
-        // Right panel: buttons positioned relative to where they'll be drawn
         const float diffBW = (RW - LP * 3.f) / 2.f;
         const float diffBH = 34.f;
         const float abW = (RW - LP * 3.f) / 2.f;
 
-        // Approximate y positions matching the render section below
-        // (right panel content starts at y=90)
+    
         float rpBtnY = 90.f
             + 16.f   // "Objective" label
             + 40.f   // objective text (up to 2 lines)
@@ -735,19 +688,19 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
         notif.box.setPosition(offX + 10.f, offY + board - 50.f);
         notif.text.setPosition(offX + 20.f, offY + board - 44.f);
 
-        // ── 3. AI wait ────────────────────────────────────────
+    
         if (aiWait && aiClock.getElapsedTime().asSeconds() >= AI_DELAY) {
             whiteTurn = !whiteTurn; aiWait = false;
         }
 
-        // ── 4. Solution step (FIX: solutionClock is outside loop) ──
+       
         if (showSol && !cur.solution.empty() &&
             solutionClock.getElapsedTime().asSeconds() > 1.4f) {
             solutionClock.restart();
             if (solStep < (int)cur.solution.size()) solStep++;
         }
 
-        // ── 5. Events ─────────────────────────────────────────
+       
         Event ev;
         while (window.pollEvent(ev)) {
             if (ev.type == Event::Closed) { ps.saveProgress(); window.close(); return; }
@@ -877,9 +830,7 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
                 btnDiff[i].shape.setOutlineColor(PC::GOLD);
         }
 
-        // ─────────────────────────────────────────────────────
-        //  RENDER
-        // ─────────────────────────────────────────────────────
+     
         window.clear(PC::BG);
 
         // Board tiles
@@ -921,7 +872,7 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
             }
         }
 
-        // FIX 2 – pieces drawn with correct tile-fitted scale
+      
         drawPiecesLocal(dragging ? dragR : -1, dragging ? dragC : -1);
 
         // Board-edge labels
@@ -944,7 +895,6 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
             window.draw(dragSpr);
         }
 
-        // Solution step text (above board)
         if (showSol && solStep > 0 && solStep <= (int)cur.solution.size()) {
             Text st("Step " + to_string(solStep) + ": " + cur.solution[solStep - 1],
                 fontTitle, 24);
@@ -974,7 +924,6 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
             window.draw(bt);
         }
 
-        // ── LEFT PANEL ────────────────────────────────────────
         {
             RectangleShape pb({ PANW,LH }); pb.setPosition(LX, LY);
             pb.setFillColor(PC::PANEL);
@@ -1054,7 +1003,6 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
             moveLog.pos = { LX + LP,y };
             moveLog.draw(window);
 
-            // Solved / failed badge at panel bottom
             if (pzDone) {
                 RectangleShape badge({ PANW - LP * 2,32.f });
                 badge.setPosition(LX + LP, LY + LH - 40.f);
@@ -1071,8 +1019,7 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
         }
         btnBack.draw(window);
 
-        // ── RIGHT PANEL ───────────────────────────────────────
-        // FIX 3 – every button is positioned ONCE and drawn ONCE
+       
         {
             float rpH = H - 46.f - 14.f;
             RectangleShape pb({ RW,rpH }); pb.setPosition(RX, 46.f);
@@ -1131,11 +1078,11 @@ void runPuzzleMode(RenderWindow& window, ChessPuzzleSystem& ps)
                 btnDiff[i].setPos(RX + LP + (i % 2) * (dBW + LP), y + (i / 2) * 42.f);
                 btnDiff[i].draw(window);
             }
-            y += 90.f;  // 2 rows × 42px + small gap
+            y += 90.f;  
 
             pzSep(window, RX + LP, y, RW - LP * 2); y += 8.f;
 
-            // Action buttons – position AND draw HERE (only once)
+           
             const float aW = (RW - LP * 3.f) / 2.f;
             btnHint.resize(aW, 36); btnHint.setPos(RX + LP, y);
             btnNext.resize(aW, 36); btnNext.setPos(RX + LP * 2 + aW, y);
