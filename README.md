@@ -2,7 +2,7 @@
 
 # ♟️ CHESS MASTER
 
-### *A full-featured chess game built in C++ with SFML*
+### *A full-featured chess game built in C++ with SFML!*
 
 <br>
 
